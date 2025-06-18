@@ -1,19 +1,19 @@
 void move() {
     if (wkey & canMoveForward() ) {
-    eyeX = eyeX + cos(leftRightHeadAngle)*10;
-    eyeZ = eyeZ + sin(leftRightHeadAngle)*10;
+    eyeX = eyeX + cos(leftRightHeadAngle)*20;
+    eyeZ = eyeZ + sin(leftRightHeadAngle)*20;
   }
   if (skey & canMoveBackward() ) {
-    eyeX = eyeX - cos(leftRightHeadAngle)*10;
-    eyeZ = eyeZ - sin(leftRightHeadAngle)*10;
+    eyeX = eyeX - cos(leftRightHeadAngle)*20;
+    eyeZ = eyeZ - sin(leftRightHeadAngle)*20;
   }
   if (akey & canMoveLeft() ) {
-    eyeX = eyeX - cos(leftRightHeadAngle + PI/2)*10;
-    eyeZ = eyeZ - sin(leftRightHeadAngle + PI/2)*10;
+    eyeX = eyeX - cos(leftRightHeadAngle + PI/2)*20;
+    eyeZ = eyeZ - sin(leftRightHeadAngle + PI/2)*20;
   }
   if (dkey & canMoveRight() ) {
-    eyeX = eyeX - cos(leftRightHeadAngle - PI/2)*10;
-    eyeZ = eyeZ - sin(leftRightHeadAngle - PI/2)*10;
+    eyeX = eyeX - cos(leftRightHeadAngle - PI/2)*20;
+    eyeZ = eyeZ - sin(leftRightHeadAngle - PI/2)*20;
   }
 
   if (skipFrame == false) {

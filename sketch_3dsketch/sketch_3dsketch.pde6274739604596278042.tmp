@@ -28,10 +28,6 @@ ArrayList<GameObject> objects;
 PGraphics world;
 PGraphics HUD;
 
-//seasons
-String currentSeason = "spring";
-
-
 void setup() {
   //create layers
   world = createGraphics(width, height, P3D);
@@ -68,22 +64,19 @@ void setup() {
   //initialize map
   map = loadImage("map.png");
   gridSize = 100;
-
-
-  loadSpring();
 }
 
 void draw() {
   world.beginDraw();
   world.textureMode(NORMAL);
 
-  world.background(200, 255, 255);
+  world.background(0);
   //lights();
   //world.pointLight(255, 255, 255, eyeX, eyeY, eyeZ);
   world.camera(eyeX, eyeY, eyeZ, focusX, focusY, focusZ, tiltX, tiltY, tiltZ);
 
 
-  //drawFloor(-2000, 2000, -2000, 2000, height, gridSize);
+  drawFloor(-1000, 2000, -2000, 4000, height, gridSize);
 
 
   //drawFloor(-2000, 2000, height-gridSize*8, gridSize);
@@ -113,24 +106,4 @@ void draw() {
   drawMinimap();
   HUD.endDraw();
   image(HUD, 0, 0);
-}
-
-void loadSpring() {
-  objects.clear();  // Clear old objects
-  currentSeason = "spring";
-
-  // Add petals
-  for (int i = 0; i < 800; i++) {
-    objects.add(new Petal());
-  }
-  
-  objects.add(new EngravedStone(eyeX + 300, 100, eyeZ + 300));
-
-  objects.add(new springTree(eyeX + 150, 30, eyeZ + 150));
-
-
-
-
-
-  // Add signs, portal, trees etc.
 }

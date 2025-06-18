@@ -4,7 +4,7 @@ class Bullet extends GameObject {
 
   Bullet() {
     super(eyeX, eyeY, eyeZ, 10);
-    speed = 50;
+    speed = 100;
     float vx = cos(leftRightHeadAngle);
     float vy = tan(upDownHeadAngle);
     float vz = sin(leftRightHeadAngle);
@@ -21,7 +21,7 @@ class Bullet extends GameObject {
     } else {
       lives = 0;
       for (int i = 0; i < 5; i++) {
-        //objects.add(new Particle(loc));
+        objects.add(new Particle(loc));
       }
     }
   }
