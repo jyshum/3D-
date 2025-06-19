@@ -6,9 +6,21 @@ void drawMap() {
         texturedCube(x*gridSize-2000, height-gridSize, y*gridSize-2000, log, gridSize);
         texturedCube(x*gridSize-2000, height-gridSize*2, y*gridSize-2000, log, gridSize);
         texturedCube(x*gridSize-2000, height-gridSize*3, y*gridSize-2000, log, gridSize);
+        texturedCube(x*gridSize-2000, height-gridSize*4, y*gridSize-2000, log, gridSize);
+
+        texturedCube(x*gridSize-2000, height-gridSize*8, y*gridSize-2000, springTreeLeaves, gridSize);
       }
       if (c == black) {
         texturedCube(x*gridSize-2000, height, y*gridSize-2000, stoneBrick, gridSize);
+      }
+      if (c == pinkTree) {
+        texturedCube(x*gridSize-2000, height-gridSize*4, y*gridSize-2000, springTreeLeaves, gridSize);
+        texturedCube(x*gridSize-2000, height-gridSize*5, y*gridSize-2000, springTreeLeaves, gridSize);
+        texturedCube(x*gridSize-2000, height-gridSize*6, y*gridSize-2000, springTreeLeaves, gridSize);
+      }
+      if (c == pinkTree2) {
+        texturedCube(x*gridSize-2000, height-gridSize*7, y*gridSize-2000, springTreeLeaves, gridSize);
+        texturedCube(x*gridSize-2000, height-gridSize*4, y*gridSize-2000, springTreeLeaves, gridSize);
       }
     }
   }
@@ -22,4 +34,21 @@ void drawFloor(int startX, int endX, int startZ, int endZ, int level, int gap) {
       texturedCube(x, level, z, grassBlock, gap);
     }
   }
+}
+
+
+
+void drawSkyNightBackground() {
+
+  timeOfDay += daySpeed;
+  if (timeOfDay > TWO_PI) timeOfDay = 0;
+
+  float brightness = (sin(timeOfDay) + 1) / 2;  // ranges from 0 (night) to 1 (day)
+
+  // Boost day colors: closer to light blue and white
+  int r = int(5 + brightness * 200);   // 5 (night) to 205 (day)
+  int g = int(10 + brightness * 220);  // 10 to 230
+  int b = int(20 + brightness * 235);  // 20 to 255
+
+  world.background(r, g, b);
 }

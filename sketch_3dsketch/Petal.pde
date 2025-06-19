@@ -18,7 +18,7 @@ class Petal extends GameObject {
     world.translate(loc.x, loc.y, loc.z);
     world.fill(255, 182, 193);  // Pink
     world.noStroke();
-    world.sphere(size / 2);
+    world.box(size / 2);
     world.popMatrix();
   }
 }

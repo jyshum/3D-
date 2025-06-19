@@ -1,5 +1,5 @@
 void move() {
-    if (wkey & canMoveForward() ) {
+  if (wkey & canMoveForward() ) {
     eyeX = eyeX + cos(leftRightHeadAngle)*20;
     eyeZ = eyeZ + sin(leftRightHeadAngle)*20;
   }
@@ -39,12 +39,12 @@ void move() {
     skipFrame = false;
   }
   println(eyeX, eyeY, eyeZ);
-  
+
   if (ekey) {
     objects.add(new Bullet());
   }
-  
 }
+
 
 boolean canMoveForward() {
   float fwdx, fwdy, fwdz;
@@ -58,7 +58,8 @@ boolean canMoveForward() {
   mapx = int(fwdx+2000) / gridSize;
   mapy = int(fwdz+2000) / gridSize;
 
-  if (map.get(mapx, mapy) == white) {
+  color tileColor = map.get(mapx, mapy);
+  if (tileColor == white || tileColor == pinkTree || tileColor == pinkTree2) {
     return true;
   } else {
     return false;
@@ -77,7 +78,8 @@ boolean canMoveBackward() {
   mapx = int(bwdx+2000) / gridSize;
   mapy = int(bwdz+2000) / gridSize;
 
-  if (map.get(mapx, mapy) == white) {
+  color tileColor = map.get(mapx, mapy);
+  if (tileColor == white || tileColor == pinkTree || tileColor == pinkTree2) {
     return true;
   } else {
     return false;
@@ -96,7 +98,8 @@ boolean canMoveLeft() {
   mapx = int(mlx+2000) / gridSize;
   mapy = int(mlz+2000) / gridSize;
 
-  if (map.get(mapx, mapy) == white) {
+  color tileColor = map.get(mapx, mapy);
+  if (tileColor == white || tileColor == pinkTree || tileColor == pinkTree2) {
     return true;
   } else {
     return false;
@@ -115,7 +118,8 @@ boolean canMoveRight() {
   mapx = int(mrx+2000) / gridSize;
   mapy = int(mrz+2000) / gridSize;
 
-  if (map.get(mapx, mapy) == white) {
+  color tileColor = map.get(mapx, mapy);
+  if (tileColor == white || tileColor == pinkTree || tileColor == pinkTree2) {
     return true;
   } else {
     return false;
