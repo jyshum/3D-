@@ -13,12 +13,30 @@ class Petal extends GameObject {
     }
   }
 
-  void show() {
-    world.pushMatrix();
-    world.translate(loc.x, loc.y, loc.z);
-    world.fill(255, 182, 193);  // Pink
+void show() {
+  world.pushMatrix();
+  world.translate(loc.x, loc.y, loc.z);
+
+  if (brightness > 0.5) {
+    // Daytime: pink petals
+    world.fill(petalPink);
     world.noStroke();
     world.box(size / 2);
+  } else {
+    // Nighttime: glowing yellow firefly
+    world.noStroke();
+
+    // Glow effect (larger, transparent sphere behind the main one)
+    world.pushMatrix();
+    world.fill(255, 255, 0, 50); // very transparent yellow glow
+    world.box(size * 1.5);    // larger "glow field"
     world.popMatrix();
+
+    // Core firefly
+    world.fill(255, 255, 0);     // solid yellow core
+    world.box(size / 2);      // or size if you prefer larger
   }
+
+  world.popMatrix();
+}
 }

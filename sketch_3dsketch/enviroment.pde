@@ -42,9 +42,7 @@ void drawSkyNightBackground() {
 
   timeOfDay += daySpeed;
   if (timeOfDay > TWO_PI) timeOfDay = 0;
-
-  float brightness = (sin(timeOfDay) + 1) / 2;  // ranges from 0 (night) to 1 (day)
-
+  
   // Boost day colors: closer to light blue and white
   int r = int(5 + brightness * 200);   // 5 (night) to 205 (day)
   int g = int(10 + brightness * 220);  // 10 to 230
