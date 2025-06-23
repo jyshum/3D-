@@ -4,6 +4,8 @@ void keyPressed() {
   if (key == 'D' || key == 'd') dkey = true;
   if (key == 'S' || key == 's') skey = true;
   if (key == 'E' || key == 'e') ekey = true;
+  if (keyCode == SHIFT) shiftKey = true;
+  if (key == ' ') spaceKey = true;
 }
 
 void keyReleased() {
@@ -12,4 +14,6 @@ void keyReleased() {
   if (key == 'D' || key == 'd') dkey = false;
   if (key == 'S' || key == 's') skey = false;
   if (key == 'E' || key == 'e') ekey = false;
+  if (keyCode == SHIFT) shiftKey = false;
+  if (key == ' ') spaceKey = false;
 }

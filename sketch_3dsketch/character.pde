@@ -1,20 +1,28 @@
 void move() {
+  
+  //sprint stuff
+  float sprintSpeed = 5;
+  if (shiftKey) {
+    sprintSpeed = 10;
+  }
+  
   if (wkey & canMoveForward() ) {
-    eyeX = eyeX + cos(leftRightHeadAngle)*20;
-    eyeZ = eyeZ + sin(leftRightHeadAngle)*20;
+    eyeX = eyeX + cos(leftRightHeadAngle)*sprintSpeed;      //multiplying it by sprint speed so it adjusts how fast the character is moving
+    eyeZ = eyeZ + sin(leftRightHeadAngle)*sprintSpeed;
   }
   if (skey & canMoveBackward() ) {
-    eyeX = eyeX - cos(leftRightHeadAngle)*20;
-    eyeZ = eyeZ - sin(leftRightHeadAngle)*20;
+    eyeX = eyeX - cos(leftRightHeadAngle)*sprintSpeed;
+    eyeZ = eyeZ - sin(leftRightHeadAngle)*sprintSpeed;
   }
   if (akey & canMoveLeft() ) {
-    eyeX = eyeX - cos(leftRightHeadAngle + PI/2)*20;
-    eyeZ = eyeZ - sin(leftRightHeadAngle + PI/2)*20;
+    eyeX = eyeX - cos(leftRightHeadAngle + PI/2)*sprintSpeed;
+    eyeZ = eyeZ - sin(leftRightHeadAngle + PI/2)*sprintSpeed;
   }
   if (dkey & canMoveRight() ) {
-    eyeX = eyeX - cos(leftRightHeadAngle - PI/2)*20;
-    eyeZ = eyeZ - sin(leftRightHeadAngle - PI/2)*20;
+    eyeX = eyeX - cos(leftRightHeadAngle - PI/2)*sprintSpeed;
+    eyeZ = eyeZ - sin(leftRightHeadAngle - PI/2)*sprintSpeed;
   }
+  
 
   if (skipFrame == false) {
     leftRightHeadAngle = leftRightHeadAngle + (mouseX - pmouseX)*0.01;
@@ -25,9 +33,19 @@ void move() {
   if (upDownHeadAngle < -PI/2.5) upDownHeadAngle = -PI/2.5;
 
 
-  focusX = eyeX + cos(leftRightHeadAngle)*300;
+
   focusZ = eyeZ + sin(leftRightHeadAngle)*300;
   focusY = eyeY + tan(upDownHeadAngle)*300;
+
+  //bobble head stuff
+  float bobbleOffset = sin(bobbleTimer * 2) * bobbleAmount; //uses ANOTHER sin graph to simulate a smooth up and down 
+  float baseEyeY = 8 * height / 10;  // your current base eyeY
+  eyeY = baseEyeY + bobbleOffset; //setting the eyeY our vertical viewpoint so that its affected by the up and down wave of bobbleOffset
+
+  float sidewaysBobble = cos(bobbleTimer * 2) * 5;  // small side sway and same logic as up and down just sideways
+  focusX = eyeX + cos(leftRightHeadAngle) * 300 + sidewaysBobble;
+
+
 
   if (mouseX > width-2) {
     rbt.mouseMove(3, mouseY);
@@ -38,92 +56,59 @@ void move() {
   } else {
     skipFrame = false;
   }
-  println(eyeX, eyeY, eyeZ);
 
-  if (ekey) {
-    objects.add(new Bullet());
+  boolean isWalking = wkey || akey || skey || dkey; 
+
+  if (isWalking) { //only makes it so that the head bobble is activated when walking(or pressing w, a, s, d).
+    bobbleTimer += bobbleSpeed;
+  } else {
+    bobbleTimer = 0;
   }
 }
 
+//collision stuff and logic
+boolean isWalkable(float x, float z) {
+  int mapx = int(x + 2000) / gridSize;
+  int mapy = int(z + 2000) / gridSize;
 
-boolean canMoveForward() {
-  float fwdx, fwdy, fwdz;
-
-  int mapx, mapy;
-
-  fwdx = eyeX + cos(leftRightHeadAngle)*120;
-  fwdy = eyeY;
-  fwdz = eyeZ + sin(leftRightHeadAngle)*120;
-
-  mapx = int(fwdx+2000) / gridSize;
-  mapy = int(fwdz+2000) / gridSize;
+  if (mapx < 0 || mapx >= map.width || mapy < 0 || mapy >= map.height) return false;
 
   color tileColor = map.get(mapx, mapy);
-  if (tileColor == white || tileColor == pinkTree || tileColor == pinkTree2) {
-    return true;
-  } else {
-    return false;
-  }
+  return tileColor == white || tileColor == pinkTree || tileColor == pinkTree2 || tileColor == mossyStone || tileColor == moss1;  //looks for all the things you can walk on
+}
+
+
+boolean canMoveInDirection(float angle) {
+  float futureX = eyeX + cos(angle) * 50;
+  float futureZ = eyeZ + sin(angle) * 50;
+
+  float padding = 30;    //padding is the distance/space allowed, i still havent figured this out yet and made it more robust.
+  
+  //right now its able to not cut any corners but when I walk straight into a block i stop but i sort of see inside it.
+
+  return (
+    isWalkable(futureX + padding, futureZ + padding) &&
+    isWalkable(futureX + padding, futureZ - padding) &&
+    isWalkable(futureX - padding, futureZ + padding) &&
+    isWalkable(futureX - padding, futureZ - padding)
+    );
+}
+
+//setting all the other move in forward by calling moveindirection so the code is alot cleaner
+boolean canMoveForward() {
+  return canMoveInDirection(leftRightHeadAngle);
 }
 
 boolean canMoveBackward() {
-  float bwdx, bwdy, bwdz;
-
-  int mapx, mapy;
-
-  bwdx = eyeX + cos(leftRightHeadAngle+radians(180))*120;
-  bwdy = eyeY;
-  bwdz = eyeZ + sin(leftRightHeadAngle+radians(180))*120;
-
-  mapx = int(bwdx+2000) / gridSize;
-  mapy = int(bwdz+2000) / gridSize;
-
-  color tileColor = map.get(mapx, mapy);
-  if (tileColor == white || tileColor == pinkTree || tileColor == pinkTree2) {
-    return true;
-  } else {
-    return false;
-  }
+  return canMoveInDirection(leftRightHeadAngle + PI);
 }
 
 boolean canMoveLeft() {
-  float mlx, mly, mlz;
-
-  int mapx, mapy;
-
-  mlx = eyeX + cos(leftRightHeadAngle-radians(90))*120;
-  mly = eyeY;
-  mlz = eyeZ + sin(leftRightHeadAngle-radians(90))*120;
-
-  mapx = int(mlx+2000) / gridSize;
-  mapy = int(mlz+2000) / gridSize;
-
-  color tileColor = map.get(mapx, mapy);
-  if (tileColor == white || tileColor == pinkTree || tileColor == pinkTree2) {
-    return true;
-  } else {
-    return false;
-  }
+  return canMoveInDirection(leftRightHeadAngle - HALF_PI);
 }
 
 boolean canMoveRight() {
-  float mrx, mry, mrz;
-
-  int mapx, mapy;
-
-  mrx = eyeX + cos(leftRightHeadAngle+radians(90))*120;
-  mry = eyeY;
-  mrz = eyeZ + sin(leftRightHeadAngle+radians(90))*120;
-
-  mapx = int(mrx+2000) / gridSize;
-  mapy = int(mrz+2000) / gridSize;
-
-  color tileColor = map.get(mapx, mapy);
-  if (tileColor == white || tileColor == pinkTree || tileColor == pinkTree2) {
-    return true;
-  } else {
-    return false;
-  }
+  return canMoveInDirection(leftRightHeadAngle + HALF_PI);
 }
 
 void drawFocalPoint() {

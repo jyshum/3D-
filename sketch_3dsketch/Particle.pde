@@ -1,8 +1,8 @@
-class Particle extends GameObject {
+class Particle extends GameObject {        //im also not using this since there's nothing im shooting at
   PVector vel;
   PVector gravity;
   float speed;
-   
+
   Particle(PVector newloc) {
     super();
     lives = 255;
@@ -10,12 +10,12 @@ class Particle extends GameObject {
     speed = 50;
     float vx = random(-5, 5);
     float vy = random(-5, 0);
-    float vz = random(-5,5);
+    float vz = random(-5, 5);
     vel = new PVector(vx, vy, vz);
     vel.setMag(speed);
     gravity = new PVector(0, 5, 0);
   }
-  
+
   void act() {
     if (loc.y >= height) {
       loc.y = height;
@@ -26,7 +26,7 @@ class Particle extends GameObject {
       loc.add(vel);
     }
   }
-  
+
   void show() {
     world.pushMatrix();
     world.translate(loc.x, loc.y, loc.z);
@@ -36,6 +36,4 @@ class Particle extends GameObject {
     world.popMatrix();
     lives --;
   }
-  
-  
 }

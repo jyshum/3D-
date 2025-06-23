@@ -1,4 +1,4 @@
-class Bullet extends GameObject {
+class Bullet extends GameObject {        //Im not using bullets in the game but left it here
   PVector dir;
   float speed;
 
